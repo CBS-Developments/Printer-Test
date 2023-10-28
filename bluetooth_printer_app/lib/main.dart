@@ -20,6 +20,11 @@ class _MyAppState extends State<MyApp> {
   bool _connected = false;
   BluetoothDevice? _device;
   String tips = 'no device connect';
+  List<Item> items = [
+    Item("3pc Vacuum Pack", 30.00, 8, 240.00),
+    Item("Item 2", 10.00, 5, 50.00),
+    // Add more items here
+  ];
   @override
   void initState() {
     super.initState();
@@ -191,10 +196,41 @@ class _MyAppState extends State<MyApp> {
                           list.add(LineText(type: LineText.TYPE_TEXT, content: "Total(Rs)", weight: 1, align: LineText.ALIGN_LEFT, x: 255, relativeX: 0, linefeed: 1));
                           list.add(LineText(linefeed: 1));
 
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: "1. 3pc Vacuum Pack", weight: 1, align: LineText.ALIGN_LEFT, x: 0, relativeX: 0, linefeed: 1));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: '30.00', weight: 1, align: LineText.ALIGN_LEFT, x: 5, relativeX: 0, linefeed: 0));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: '8', weight: 1, align: LineText.ALIGN_LEFT, x: 160, relativeX: 0, linefeed: 0));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: "240.00", weight: 1, align: LineText.ALIGN_LEFT, x: 260, relativeX: 0, linefeed: 1));
+                          // Add items to the receipt
+                          for (Item item in items) {
+                            list.add(LineText(
+                                type: LineText.TYPE_TEXT,
+                                content: '1. ${item.name}',
+                                weight: 1,
+                                align: LineText.ALIGN_LEFT,
+                                x: 0,
+                                relativeX: 0,
+                                linefeed: 1));
+                            list.add(LineText(
+                                type: LineText.TYPE_TEXT,
+                                content: item.price.toString(),
+                                weight: 1,
+                                align: LineText.ALIGN_LEFT,
+                                x: 5,
+                                relativeX: 0,
+                                linefeed: 0));
+                            list.add(LineText(
+                                type: LineText.TYPE_TEXT,
+                                content: item.quantity.toString(),
+                                weight: 1,
+                                align: LineText.ALIGN_LEFT,
+                                x: 160,
+                                relativeX: 0,
+                                linefeed: 0));
+                            list.add(LineText(
+                                type: LineText.TYPE_TEXT,
+                                content: item.total.toString(),
+                                weight: 1,
+                                align: LineText.ALIGN_LEFT,
+                                x: 260,
+                                relativeX: 0,
+                                linefeed: 1));
+                          }
 
                           list.add(LineText(type: LineText.TYPE_TEXT, content: '--------------------------------', weight: 1, align: LineText.ALIGN_CENTER,linefeed: 1));
                           list.add(LineText(linefeed: 1));
@@ -202,32 +238,6 @@ class _MyAppState extends State<MyApp> {
                           await bluetoothPrint.printReceipt(config, list);
                         }:null,
                       ),
-                      OutlinedButton(
-                        child: Text('print My Details'),
-                        onPressed:  _connected?() async {
-                          Map<String, dynamic> config = Map();
-
-                          List<LineText> list = [];
-
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: '**********************************************', weight: 1, align: LineText.ALIGN_CENTER,linefeed: 1));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: 'My Deatails', weight: 1, align: LineText.ALIGN_CENTER, fontZoom: 2, linefeed: 1));
-                          list.add(LineText(linefeed: 1));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: 'Email: ', weight: 1, align: LineText.ALIGN_LEFT, x: 0,relativeX: 0, linefeed: 0));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: '  Address', weight: 1, align: LineText.ALIGN_LEFT, x: 350, relativeX: 0, linefeed: 0));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: 'Phone', weight: 1, align: LineText.ALIGN_LEFT, x: 500, relativeX: 0, linefeed: 1));
-                          list.add(LineText(type: LineText.TYPE_TEXT, content: '**********************************************', weight: 1, align: LineText.ALIGN_CENTER,linefeed: 1));
-                          list.add(LineText(linefeed: 1));
-
-                          ByteData data = await rootBundle.load("images/BWCBS.png");
-                          List<int> imageBytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-                          String base64Image = base64Encode(imageBytes);
-                          // list.add(LineText(type: LineText.TYPE_IMAGE, content: base64Image, align: LineText.ALIGN_CENTER, linefeed: 1));
-
-                          await bluetoothPrint.printReceipt(config, list);
-                        }:null,
-                      ),
-
-
 
                       OutlinedButton(
                         child: Text('print selftest'),
@@ -262,4 +272,13 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class Item {
+  final String name;
+  final double price;
+  final int quantity;
+  final double total;
+
+  Item(this.name, this.price, this.quantity, this.total);
 }
