@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
+
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -20,11 +20,13 @@ class _MyAppState extends State<MyApp> {
   bool _connected = false;
   BluetoothDevice? _device;
   String tips = 'no device connect';
+
   List<Item> items = [
     Item("3pc Vacuum Pack", 30.00, 8, 240.00),
     Item("Item 2", 10.00, 5, 50.00),
     // Add more items here
   ];
+
   @override
   void initState() {
     super.initState();
@@ -170,11 +172,6 @@ class _MyAppState extends State<MyApp> {
                           List<LineText> list = [];
 
                           list.add(LineText(type: LineText.TYPE_TEXT, content: '--------------------------------', weight: 1, align: LineText.ALIGN_CENTER,linefeed: 1));
-                          // // Add the image before the 'Taxperts' content
-                          // ByteData imageByteData = await rootBundle.load("images/BWCBS.png");
-                          // List<int> imageBytes = imageByteData.buffer.asUint8List(imageByteData.offsetInBytes, imageByteData.lengthInBytes);
-                          // String base64Image = base64Encode(imageBytes);
-                          // list.add(LineText(type: LineText.TYPE_IMAGE, content: base64Image, align: LineText.ALIGN_CENTER, linefeed: 1));
 
                           list.add(LineText(type: LineText.TYPE_TEXT, content: 'Mega Mart', weight: 1, align: LineText.ALIGN_CENTER, fontZoom: 2, linefeed: 1));
                           list.add(LineText(linefeed: 1));
